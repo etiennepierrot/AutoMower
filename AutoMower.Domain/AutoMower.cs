@@ -8,11 +8,32 @@ namespace AutoMower.Domain
     {
         public string Run(string inputData)
         {
-            string[] splittedInput = inputData.Split("\r\n");
-            string positionString = splittedInput[1];
-            PositionMower positionMower = ParsePosition(positionString);
-            positionMower = ParseCommand(splittedInput[2]).Aggregate(positionMower, ApplyCommand);
-            return positionMower.ToString();
+            string[] splittedInput = ReadLines(inputData);
+
+            List<PositionMower> positionMowers = new List<PositionMower>();
+            for (int indexMower = 0; indexMower < splittedInput.Length / 2; indexMower ++)
+            {
+                PositionMower positionMower = ParsePosition(splittedInput[2 * indexMower + 1]);
+                Command[] commands = ParseCommand(splittedInput[2 * indexMower + 2]);
+                positionMower = commands.Aggregate(positionMower, ApplyCommand);
+                positionMowers.Add(positionMower);
+            }
+
+            return BuildOutputPosition(positionMowers);
+        }
+
+        private static string BuildOutputPosition(List<PositionMower> positionMowers)
+        {
+            return positionMowers.Select(p => p.ToString())
+                .Aggregate((current, next) => current + "\r\n" + next);
+        }
+
+        private static string[] ReadLines(string inputData)
+        {
+            return inputData
+                .Split("\r\n")
+                .Where( str => str != string.Empty)
+                .ToArray();
         }
 
         internal static readonly Dictionary<string, Orientation> OrientationDictionary = new Dictionary<string, Orientation>()

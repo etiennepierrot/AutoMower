@@ -25,6 +25,12 @@ namespace AutoMower.Tests
         {
             Assert.AreEqual("2 0 E", _autoMower.Run("5 5\r\n1 0 N\r\nRF"));
         }
-        
+
+        [TestMethod]
+        public void Move_Two_Mower()
+        {
+            Assert.AreEqual("1 1 N\r\n2 1 N", _autoMower.Run("5 5\r\n1 0 N\r\nF\r\n2 0 N\r\nF\r\n"));
+        }
+
     }
 }
