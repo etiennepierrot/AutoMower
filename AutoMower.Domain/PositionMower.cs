@@ -14,7 +14,7 @@ namespace AutoMower.Domain
 
         public override string ToString()
         {
-            string charOrientation = AutoMower.OrientationDictionary.Single(kv => kv.Value == Orientation).Key;
+            string charOrientation = SequenceCharParser.OrientationDictionary.Single(kv => kv.Value == Orientation).Key;
             return $"{X} {Y} {charOrientation}";
         }
 
@@ -22,7 +22,12 @@ namespace AutoMower.Domain
         public int Y { get; }
         public Orientation Orientation { get; }
 
-        public PositionMower MoveForward()
+        public PositionMower MoveForward(Lawn lawn)
+        {
+            return lawn.IsInside(PredictPosition()) ? PredictPosition() : this;
+        }
+
+        private PositionMower PredictPosition()
         {
             switch (Orientation)
             {
@@ -33,7 +38,7 @@ namespace AutoMower.Domain
                 case Orientation.East:
                     return new PositionMower(X + 1, Y, Orientation);
                 case Orientation.South:
-                    return new PositionMower(Y - 1, Y, Orientation);
+                    return new PositionMower(X, Y - 1, Orientation);
                 default:
                     throw new ArgumentOutOfRangeException();
             }
