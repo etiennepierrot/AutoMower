@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMower.Tests", "AutoMower.Tests\AutoMower.Tests.csproj", "{BEADF56C-B844-45D6-A5D6-8D5C14293E55}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMower.Domain", "AutoMower.Domain\AutoMower.Domain.csproj", "{DC861029-D12F-434B-898D-249C07C88F77}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{BEADF56C-B844-45D6-A5D6-8D5C14293E55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEADF56C-B844-45D6-A5D6-8D5C14293E55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEADF56C-B844-45D6-A5D6-8D5C14293E55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC861029-D12F-434B-898D-249C07C88F77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC861029-D12F-434B-898D-249C07C88F77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC861029-D12F-434B-898D-249C07C88F77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC861029-D12F-434B-898D-249C07C88F77}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
