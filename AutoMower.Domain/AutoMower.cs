@@ -8,8 +8,10 @@ namespace AutoMower.Domain
         public string Run(string sequenceChar)
         {
             string[] splittedInput = ReadLines(sequenceChar);
-            var lawn = SequenceCharParser.ParseLawn(splittedInput[0]);
             Dictionary<PositionMower, Command[]> commandsOnMowers = SequenceCharParser.ParseCommandOnMower(splittedInput);
+
+            Lawn lawn = SequenceCharParser.ParseLawn(splittedInput[0], commandsOnMowers.Keys.ToArray());
+
             IEnumerable<PositionMower> newPositionMowers = ApplyCommands(commandsOnMowers, lawn);
             return BuildOutputPosition(newPositionMowers);
         }
@@ -36,11 +38,5 @@ namespace AutoMower.Domain
                 .Where( str => str != string.Empty)
                 .ToArray();
         }
-
-        
-
-        
-
-        
     }
 }

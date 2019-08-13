@@ -1,39 +1,63 @@
 using System;
+using System.Linq;
 
 namespace AutoMower.Domain
 {
     internal class Lawn
     {
-        public Lawn(int width, int height)
+
+        public Lawn(int width, int height, PositionMower[] positionMowers)
         {
-            Width = width;
-            Height = height;
+            _width = width;
+            _height = height;
+            _positionMowers = positionMowers;
         }
+
+        private readonly PositionMower[] _positionMowers;
+        private readonly int _width;
+        private readonly int _height;
 
         public PositionMower ApplyCommand(PositionMower position, Command command)
         {
+            PositionMower positionMower = null;
             switch (command)
             {
                 case Command.Left:
-                    return position.RotateToLeft();
+                    positionMower = position.RotateToLeft();
+                    break;
                 case Command.Right:
-                    return position.RotateToRight();
+                    positionMower = position.RotateToRight();
+                    break;
                 case Command.Forward:
-                    return position.MoveForward(this);
+                    positionMower = position.MoveForward(this);
+                    break; ;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(command), command, null);
             }
+
+            _positionMowers[positionMower.IdMower] = positionMower;
+            return positionMower;
         }
 
-        public int Width { get; }
-        public int Height { get; }
+        public bool CanMoveInThisPosition(PositionMower futurePositionMower)
+        {
+            return Contains(futurePositionMower) 
+                   && !AnotherMowerInThisPosition(futurePositionMower);
+        }
 
-        public bool IsInside(PositionMower futurePosition)
+        private bool AnotherMowerInThisPosition(PositionMower positionMower)
+        {
+            return _positionMowers.Any(p => 
+                       p.IdMower != positionMower.IdMower
+                    && p.IsSameCoordinate(positionMower));
+        }
+
+        private bool Contains(PositionMower futurePosition)
         {
             return futurePosition.X >= 0 
-                   && futurePosition.X <= Width 
+                   && futurePosition.X <= _width 
                    && futurePosition.Y >= 0
-                   && futurePosition.Y <= Height;
+                   && futurePosition.Y <= _height;
 
         }
     }

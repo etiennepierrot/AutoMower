@@ -21,10 +21,10 @@ namespace AutoMower.Domain
             {'F', Command.Forward}
         };
 
-        public static Lawn ParseLawn(string dataLawn)
+        public static Lawn ParseLawn(string dataLawn, PositionMower[] positionMowers)
         {
             var splittedDataLawn = dataLawn.Split(' ');
-            return new Lawn(Int32.Parse(splittedDataLawn[0]), Int32.Parse(splittedDataLawn[1]));
+            return new Lawn(Int32.Parse(splittedDataLawn[0]), Int32.Parse(splittedDataLawn[1]), positionMowers);
         }
 
         public static Dictionary<PositionMower, Command[]> ParseCommandOnMower(string[] splittedInput)
@@ -33,7 +33,7 @@ namespace AutoMower.Domain
             
             for (int indexMower = 0; indexMower < splittedInput.Length / 2; indexMower++)
             {
-                PositionMower positionMower = ParsePosition(splittedInput[2 * indexMower + 1]);
+                PositionMower positionMower = ParsePosition(splittedInput[2 * indexMower + 1], indexMower);
                 Command[] commands = ParseCommand(splittedInput[2 * indexMower + 2]);
                 dic.Add(positionMower, commands);
             }
@@ -46,12 +46,12 @@ namespace AutoMower.Domain
             return commandString.ToCharArray().Select(c => CommandDictionary[c]).ToArray();
         }
 
-        private static PositionMower ParsePosition(string positionString)
+        private static PositionMower ParsePosition(string positionString, int idMower)
         {
             int x = Int32.Parse(positionString.Split(' ')[0]);
             int y = Int32.Parse(positionString.Split(' ')[1]);
             string orientation = positionString.Split(' ')[2];
-            return new PositionMower(x, y, OrientationDictionary[orientation]);
+            return new PositionMower(x, y, OrientationDictionary[orientation], idMower);
         }
     }
 }
