@@ -5,14 +5,18 @@ namespace AutoMower.Domain
 {
     public class AutoMower
     {
+        private const string NewLineChar = "\r\n";
+        
         public string Run(string sequenceChar)
         {
+            //TODO : check that sequence char is valid
             string[] splittedInput = ReadLines(sequenceChar);
             Dictionary<PositionMower, Command[]> commandsOnMowers = SequenceCharParser.ParseCommandOnMower(splittedInput);
 
             Lawn lawn = SequenceCharParser.ParseLawn(splittedInput[0], commandsOnMowers.Keys.ToArray());
 
             IEnumerable<PositionMower> newPositionMowers = ApplyCommands(commandsOnMowers, lawn);
+
             return BuildOutputPosition(newPositionMowers);
         }
 
@@ -28,13 +32,13 @@ namespace AutoMower.Domain
         private static string BuildOutputPosition(IEnumerable<PositionMower> positionMowers)
         {
             return positionMowers.Select(p => p.ToString())
-                .Aggregate((current, next) => current + "\r\n" + next);
+                .Aggregate((current, next) => current + NewLineChar + next);
         }
 
         private static string[] ReadLines(string inputData)
         {
             return inputData
-                .Split("\r\n")
+                .Split(NewLineChar)
                 .Where( str => str != string.Empty)
                 .ToArray();
         }

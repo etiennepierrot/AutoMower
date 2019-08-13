@@ -5,7 +5,6 @@ namespace AutoMower.Domain
 {
     internal class Lawn
     {
-
         public Lawn(int width, int height, PositionMower[] positionMowers)
         {
             _width = width;
@@ -19,7 +18,7 @@ namespace AutoMower.Domain
 
         public PositionMower ApplyCommand(PositionMower position, Command command)
         {
-            PositionMower positionMower = null;
+            PositionMower positionMower;
             switch (command)
             {
                 case Command.Left:
@@ -35,8 +34,13 @@ namespace AutoMower.Domain
                     throw new ArgumentOutOfRangeException(nameof(command), command, null);
             }
 
-            _positionMowers[positionMower.IdMower] = positionMower;
+            Track(positionMower);
             return positionMower;
+        }
+
+        private void Track(PositionMower positionMower)
+        {
+            _positionMowers[positionMower.IdMower] = positionMower;
         }
 
         public bool CanMoveInThisPosition(PositionMower futurePositionMower)
