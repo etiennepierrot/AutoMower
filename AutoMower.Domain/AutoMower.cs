@@ -9,22 +9,21 @@ namespace AutoMower.Domain
         {
             string[] splittedInput = ReadLines(sequenceChar);
             var lawn = SequenceCharParser.ParseLawn(splittedInput[0]);
-
-            List<PositionMower> positionMowers = new List<PositionMower>();
-            for (int indexMower = 0; indexMower < splittedInput.Length / 2; indexMower ++)
-            {
-                PositionMower positionMower = SequenceCharParser.ParsePosition(splittedInput[2 * indexMower + 1]);
-                Command[] commands = SequenceCharParser.ParseCommand(splittedInput[2 * indexMower + 2]);
-                positionMower = commands.Aggregate(positionMower, lawn.ApplyCommand);
-                positionMowers.Add(positionMower);
-            }
-
-            return BuildOutputPosition(positionMowers);
+            Dictionary<PositionMower, Command[]> commandsOnMowers = SequenceCharParser.ParseCommandOnMower(splittedInput);
+            IEnumerable<PositionMower> newPositionMowers = ApplyCommands(commandsOnMowers, lawn);
+            return BuildOutputPosition(newPositionMowers);
         }
 
-        
+        private static IEnumerable<PositionMower> ApplyCommands(Dictionary<PositionMower, Command[]> commandsOnMowers, Lawn lawn)
+        {
+            foreach (PositionMower positionMower in commandsOnMowers.Keys)
+            {
+                yield return commandsOnMowers[positionMower].Aggregate(positionMower, lawn.ApplyCommand);
+            }
+        }
 
-        private static string BuildOutputPosition(List<PositionMower> positionMowers)
+
+        private static string BuildOutputPosition(IEnumerable<PositionMower> positionMowers)
         {
             return positionMowers.Select(p => p.ToString())
                 .Aggregate((current, next) => current + "\r\n" + next);
